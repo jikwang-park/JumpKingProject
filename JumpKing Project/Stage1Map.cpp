@@ -7,7 +7,8 @@ Stage1Map::Stage1Map(const std::string& texId, const std::string& name)
 	:SpriteGo(texId,name)
 {
 	sortingLayer = SortingLayers::Background;
-	sortingOrder = 0;
+	sortingOrder = 1;
+	
 }
 
 void Stage1Map::SetOrigin(Origins preset)
@@ -41,12 +42,36 @@ void Stage1Map::SetScale(const sf::Vector2f& s)
 {
 	scale = s;
 	sprite.setScale(scale);
+
 }
 
 void Stage1Map::Init()
 {
-
+	
 	sprite.setTexture(TEXTURE_MGR.Get("grahpics/midground/1.png"));
+	for (int i = 0; i < 5; ++i)
+	{ 
+		
+		hitboxs.push_back(hit);
+		
+	}
+	sprite.setPosition({ 0.f,0.f });
+
+	SetOrigin(Origins::BC);
+	hitboxs[0].SetRect(sprite, sf::FloatRect(0, 0, 7, 180));
+	hitboxs[1].SetRect(sprite, sf::FloatRect(0, 180, 127, 180));
+	hitboxs[2].SetRect(sprite, sf::FloatRect(127, 327, 226, 33));
+	hitboxs[3].SetRect(sprite, sf::FloatRect(353, 180, 127, 180));
+	hitboxs[4].SetRect(sprite, sf::FloatRect(473, 0, 7, 180));
+	hitboxs[0].SetColor(sf::Color::Red);
+	hitboxs[1].SetColor(sf::Color::Green);
+	hitboxs[2].SetColor(sf::Color::Blue);
+	hitboxs[3].SetColor(sf::Color::Magenta);
+	hitboxs[4].SetColor(sf::Color::Yellow);
+	hit.UpdateTr(sprite, sprite.getLocalBounds());
+
+	
+	
 	SpriteGo::Init();
 	
 }
@@ -59,15 +84,16 @@ void Stage1Map::Release()
 void Stage1Map::Reset()
 {
 	/*sprite.setTexture(TEXTURE_MGR.Get(textureId));*/
-	sprite.setScale(4.f, 3.f);
-	sprite.setPosition({ 1920.f / 2 , 1080.f / 2 });
-	SetOrigin(Origins::MC);
+	
 	SpriteGo::Reset();
 }
 
 void Stage1Map::Update(float dt)
 {
+
 	SpriteGo::Update(dt);
+
+
 	
 
 }
@@ -75,4 +101,9 @@ void Stage1Map::Update(float dt)
 void Stage1Map::Draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
+	for (int i = 0; i < 5; ++i)
+	{
+		hitboxs[i].Draw(window);
+		hit.Draw(window);
+	}
 }

@@ -45,10 +45,8 @@ void Stage2Map::SetScale(const sf::Vector2f& s)
 
 void Stage2Map::Init()
 {
-
 	sprite.setTexture(TEXTURE_MGR.Get("grahpics/midground/2.png"));
 	SpriteGo::Init();
-
 }
 
 void Stage2Map::Release()
@@ -59,9 +57,8 @@ void Stage2Map::Release()
 void Stage2Map::Reset()
 {
 	/*sprite.setTexture(TEXTURE_MGR.Get(textureId));*/
-	sprite.setScale(4.f, 3.f);
-	sprite.setPosition({1920.f/2 , -1080.f / 2 });
-	SetOrigin(Origins::MC);
+	sprite.setPosition({0,-360});
+	SetOrigin(Origins::BC);
 	SpriteGo::Reset();
 }
 

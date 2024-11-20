@@ -204,6 +204,38 @@ bool Utils::PointInTransformBounds(const sf::Transformable& transformable, const
     return localBounds.contains(localPoint);
 }
 
+bool Utils::CheckPixelCollision(const sf::Sprite& texture, const sf::FloatRect& platform)
+{
+    sf::Image textureImage = texture.getTexture()->copyToImage();
+    sf::Vector2f texturePos = texture.getPosition();
+
+    float platformLeft = static_cast<float>(platform.left);
+    float platformTop = static_cast<float>(platform.top);
+    float platformRight = static_cast<float>(platform.left + platform.width);
+    float platformBottom = static_cast<float>(platform.top + platform.height);
+
+    for (int i = 0; i < textureImage.getSize().x; ++i)
+    {
+        for (int j = 0; j < textureImage.getSize().y; ++j)
+        {
+            sf::Color texturePixel = textureImage.getPixel(i, j);
+
+            if (texturePixel.a > 0)
+            {
+                float platfromX = texturePos.x + i;
+                float platfromY = texturePos.y + j;
+
+                if (platfromX >= platformLeft && platfromX <= platformRight
+                    && platfromY >= platformTop && platfromY <= platformBottom)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 std::vector<sf::Vector2f> Utils::GetShapePoints(const sf::RectangleShape& shape)
 {
     sf::FloatRect localBounds = shape.getLocalBounds();

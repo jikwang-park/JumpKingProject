@@ -52,6 +52,8 @@ public:
 	static bool CheckCollision(const sf::Sprite& shapeA, const sf::Sprite& shapeB);
 	static bool PointInTransformBounds(const sf::Transformable& transformable,
 		const sf::FloatRect& localBounds, const sf::Vector2f point);
+	//내가만든 충돌범위 체크 함수
+	static bool CheckPixelCollision(const sf::Sprite& texture, const sf::FloatRect& platform);
 
 	static std::vector<sf::Vector2f> GetShapePoints(const sf::RectangleShape& shape);
 	static std::vector<sf::Vector2f> GetShapePoints(const sf::Sprite& shape);

@@ -3,6 +3,8 @@
 class Stage1Map : public SpriteGo
 {
 protected:
+	std::vector<HitBox> hitboxs;
+	HitBox hit;
 
 	
 public:
@@ -17,7 +19,8 @@ public:
 	void SetPosition(const sf::Vector2f& pos) override;
 	void SetRotation(float angle) override;
 	void SetScale(const sf::Vector2f& pos) override;
-
+	
+	std::vector<HitBox> GetHitBoxs() const { return hitboxs; }
 	void Init() override;
 	void Release() override;
 	void Reset() override;

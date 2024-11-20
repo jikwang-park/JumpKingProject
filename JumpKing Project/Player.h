@@ -1,15 +1,31 @@
 #pragma once
 #include "GameObject.h"
+
 class Player : public GameObject
 {
 protected:
 	sf::Sprite body;
 	Animator animator;
 
+	HitBox hitbox;
+
 	AnimationClip stay;
 	AnimationClip run;
-	AnimationClip jump;
+	AnimationClip jumpstart;
+	AnimationClip jumpping;
+	AnimationClip jumpend;
+	AnimationClip jumphigh;
 
+	enum class JumpState
+	{
+		None,
+		Start,
+		MidAir,
+		HighAir,
+		End,
+	};
+
+	JumpState jumpState = JumpState::None;
 
 	std::string texureId = "grahpics/playerimage/player.png";
 
@@ -17,8 +33,18 @@ protected:
 	sf::Vector2f velocity = { 0.f,0.f };
 	sf::Vector2f grav = { 0.f, 300.f };
 
+	//점프관련 멤버변수
+	float jumpHoldTime = 0.f; //스페이스바 누르고 있는 시간
+	float maxJumpHoldTime = 0.5f; //최대 점프 유지 시간
+	float minJumpForce = -10.f; //최소 점프힘
+	float maxJumpForce = -1000.f; //최대 점프힘
+	float highAirTimer = 0.f;
+	float exceedPos = 0.f;
+
+	bool isJumping = false;
 	bool isGrounded = true;
-	const float speed = 300.f;
+
+	const float speed = 100.f;
 	
 public:
 	Player(const std::string& name = "");
@@ -31,6 +57,9 @@ public:
 	void SetOrigin(Origins preset) override;
 	sf::Vector2f GetPosition() const { return position; } 
 	void SetOrigin(const sf::Vector2f& newOrigin) override;
+	HitBox GetPlayerHitBox() const { return hitbox; }
+	
+
 
 	void Init() override;
 	void Release() override;

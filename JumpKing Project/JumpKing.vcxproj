@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{2f52f5bb-0160-4854-9e33-44bbfe0ce7ca}</ProjectGuid>
+    <ProjectGuid>{E761B2C8-CC1E-433E-9214-F4484F058107}</ProjectGuid>
     <RootNamespace>SFMLTemplate</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>JumpKing Project</ProjectName>
@@ -197,6 +197,7 @@
     <ClInclude Include="Framework\InputMgr.h" />
     <ClInclude Include="Framework\json.hpp" />
     <ClInclude Include="Framework\ObjectPool.h" />
+    <ClInclude Include="Framework\rapidcsv.h" />
     <ClInclude Include="Framework\ResourceMgr.h" />
     <ClInclude Include="Framework\Scene.h" />
     <ClInclude Include="Framework\SceneDev1.h" />

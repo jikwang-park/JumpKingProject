@@ -10,6 +10,7 @@ enum class Languages
 
 enum class SortingLayers
 {
+	HitBox,
 	Background,
 	Midground,
 	Foreground,

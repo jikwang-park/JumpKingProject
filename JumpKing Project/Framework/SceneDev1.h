@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-
+#include "Stage1Map.h"
 class Stage1Map;
 class Stage2Map;
 class Stage3Map;
@@ -16,6 +16,11 @@ protected:
 
 	std::vector<sf::FloatRect> mapRectList;
 	
+
+	/*HitBox hitbox;*/
+
+
+	
 	float centerMovepos = -1080.f;
 	int mapCount = 3;
 
@@ -26,6 +31,8 @@ public:
 	void Init() override;
 	void Enter() override;
 	void Exit() override;
+
+	std::vector<HitBox> GetStage1HitBoxs() const { return stage1map->GetHitBoxs(); }
 
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;

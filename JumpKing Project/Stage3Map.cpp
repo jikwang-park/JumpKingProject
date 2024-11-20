@@ -59,9 +59,9 @@ void Stage3Map::Release()
 void Stage3Map::Reset()
 {
 	/*sprite.setTexture(TEXTURE_MGR.Get(textureId));*/
-	sprite.setScale(4.f, 3.f);
-	sprite.setPosition({ 1920.f / 2  , -1620.f });
-	SetOrigin(Origins::MC);
+	
+	sprite.setPosition({0 ,-720 });
+	SetOrigin(Origins::BC);
 	SpriteGo::Reset();
 }
 
