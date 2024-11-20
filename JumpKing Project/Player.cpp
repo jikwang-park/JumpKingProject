@@ -126,7 +126,7 @@ void Player::Reset()
 
 void Player::Update(float dt)
 {
-	animator.Update(dt);
+animator.Update(dt);
 
 	float horizontalInput = InputMgr::GetAxisRaw(Axis::Horizontal);
 
@@ -203,28 +203,7 @@ void Player::Update(float dt)
 	{
 		velocity += grav * dt;
 
-		if (position.
-			y > exceedPos && jumpState == JumpState::HighAir)
-		{
-			jumpState = JumpState::HighAir; 
-			highAirTimer = 0.f;
-			animator.Play(&jumphigh);      
-			SetOrigin(Origins::BC);
-		}
-
-		if (jumpState == JumpState::HighAir)
-		{
-			highAirTimer += dt;
-
-			if (highAirTimer >= 1.5f)
-			{
-				jumpState = JumpState::None;
-				animator.Play(&stay);
-				SetOrigin(Origins::BC);
-			}
-		}
-
-		if (jumpState == JumpState::MidAir && velocity.y > 0.f && jumpState != JumpState::HighAir)
+		if (jumpState == JumpState::MidAir && velocity.y > 0.f)
 		{
 			jumpState = JumpState::End;
 			animator.Play(&jumpend);
@@ -308,6 +287,8 @@ void Player::Update(float dt)
 	hitbox.SetColor(sf::Color::White);
 
 	/*auto stage1HitBoxBounds =dynamic_cast<Stage1Map*>(SCENE_MGR.GetCurrentScene()->FindGo("stage1"))->GetHitBoxs();*/
+	
+
 
 
 }

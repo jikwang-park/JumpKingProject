@@ -21,7 +21,6 @@ protected:
 		None,
 		Start,
 		MidAir,
-		HighAir,
 		End,
 	};
 
@@ -37,9 +36,7 @@ protected:
 	float jumpHoldTime = 0.f; //스페이스바 누르고 있는 시간
 	float maxJumpHoldTime = 0.5f; //최대 점프 유지 시간
 	float minJumpForce = -10.f; //최소 점프힘
-	float maxJumpForce = -1000.f; //최대 점프힘
-	float highAirTimer = 0.f;
-	float exceedPos = 0.f;
+	float maxJumpForce = -500.f; //최대 점프힘
 
 	bool isJumping = false;
 	bool isGrounded = true;
