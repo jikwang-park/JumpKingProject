@@ -45,6 +45,8 @@ public:
 		originPreset = Origins::Custom;
 	}
 
+	
+
 	virtual sf::FloatRect GetLocalBounds() const {
 		return { 0.f, 0.f, 0.f, 0.f };
 	}

@@ -152,6 +152,7 @@
     <ClCompile Include="AniPlayer.cpp" />
     <ClCompile Include="AniPlayer2.cpp" />
     <ClCompile Include="Framework\SoundMgr.cpp" />
+    <ClCompile Include="MainTitleScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SaveData.cpp" />
     <ClCompile Include="SaveLoadMgr.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Framework\stdafx.h" />
     <ClInclude Include="Framework\TextGo.h" />
     <ClInclude Include="Framework\SoundMgr.h" />
+    <ClInclude Include="MainTitleScene.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SaveData.h" />
     <ClInclude Include="SaveLoadMgr.h" />

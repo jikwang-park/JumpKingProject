@@ -3,7 +3,8 @@
 #include "Animator.h"
 #include "SceneDev1.h"
 #include "Stage1Map.h"
-
+#include "Stage2Map.h"
+#include "Stage3Map.h"
 Player::Player(const std::string& name)
 	:GameObject(name)
 {
@@ -47,8 +48,30 @@ void Player::SetOrigin(const sf::Vector2f& newOrigin)
 	origin = Utils::SetOrigin(body, originPreset);
 }
 
+/// <summary>
+/// 플레이어 기준 스테이지가 어디있는지
+/// </summary>
+/// <param name="player"></param>
+/// <param name="stage"></param>
+/// <returns></returns>
+Player::CollisionState Player::GetCollsionState(const sf::FloatRect& player, const sf::FloatRect& stage)
+{
+	Player::CollisionState state;
+	if (stage.top + stage.height > player.top
+		&& player.top + player.height > stage.top + stage.height)
+		state.Up = true;
+	if (stage.left + stage.width > player.left
+		&& player.left + player.width > stage.left + stage.width)
+		state.Left = true;
+	if (player.left + player.width > stage.left
+		&& stage.left > player.left)
+		state.Right = true;
+	if (player.top + player.height > stage.top
+		&& stage.top > player.top)
+		state.Down = true;
 
-
+	return state;
+}
 
 void Player::Init()
 {
@@ -79,13 +102,13 @@ void Player::Reset()
 		run.loopType = AnimationLoopTypes::Loop;
 		for (int i = 0; i < 4; ++i)
 		{
-			coord.left = i * 33;
+			coord.left = i * 32;
 			run.frames.push_back(AnimationFrame(texureId, coord));
 		}
 	}
 	//점프 키입력중에 나와야하는것
 	{
-		sf::IntRect coord(0, 43, 36, 36);
+		sf::IntRect coord(0, 32, 32, 32);
 		jumpstart.id = "jumpstart";
 		jumpstart.fps = 10;
 		jumpstart.loopType = AnimationLoopTypes::Loop;
@@ -93,7 +116,7 @@ void Player::Reset()
 	}
 	//점프 키입력끝나자마자 나와야하는것
 	{
-		sf::IntRect coord(36, 43, 36, 36);
+		sf::IntRect coord(32, 32, 32, 32);
 		jumpping.id = "jumpping";
 		jumpping.fps = 10;
 		jumpping.loopType = AnimationLoopTypes::Loop;
@@ -101,7 +124,7 @@ void Player::Reset()
 	}
 	//최고높이도달하고 y값 반전될때 나와야하는것
 	{
-		sf::IntRect coord(69, 43, 36, 36);
+		sf::IntRect coord(64, 32, 32, 32);
 		jumpend.id = "jumpend";
 		jumpend.fps = 10;
 		jumpend.loopType = AnimationLoopTypes::Loop;
@@ -109,26 +132,27 @@ void Player::Reset()
 	}
 	//너무 높은데에서 떨어지면나와야하는것
 	{
-		sf::IntRect coord(105, 43, 36, 36);
+		sf::IntRect coord(96, 32, 32, 32);
 		jumphigh.id = "jumphigh";
 		jumphigh.fps = 10;
 		jumphigh.loopType = AnimationLoopTypes::Loop;
 		jumphigh.frames.push_back(AnimationFrame(texureId, coord));
 	}
-	
-
-
 
 	animator.Play(&stay);
-	SetPosition({ 0, -32 }); //처음 태어나는위치
+	SetPosition({ 0, -64 }); //처음 태어나는위치
 	SetOrigin(Origins::BC);
 }
 
 void Player::Update(float dt)
 {
-animator.Update(dt);
+	animator.Update(dt);
 
 	float horizontalInput = InputMgr::GetAxisRaw(Axis::Horizontal);
+	if (horizontalInput != 0.f)
+	{
+		SetScale(horizontalInput > 0.f ? sf::Vector2f(1.f, 1.25f) : sf::Vector2f(-1.f, 1.25f));
+	}
 
 	// 좌우 이동
 	if (Utils::Magnitude(diretcion) > 1.f)
@@ -182,12 +206,12 @@ animator.Update(dt);
 			float jumpForce = minJumpForce +
 				(maxJumpForce - minJumpForce) * (jumpHoldTime / maxJumpHoldTime);
 			velocity.x = horizontalInput * speed;
-			velocity.y = jumpForce; 
+			velocity.y = jumpForce;
 
 
 			jumpState = JumpState::MidAir;
-			animator.Play(&jumpping);  
-			SetOrigin(Origins::BC);  
+			animator.Play(&jumpping);
+			SetOrigin(Origins::BC);
 		}
 
 	}
@@ -199,49 +223,43 @@ animator.Update(dt);
 
 
 	// 중력 적용
-	if (!isGrounded)
-	{
-		velocity += grav * dt;
+	//if (!isGrounded)
+	//{
+	velocity += grav * dt;
 
-		if (jumpState == JumpState::MidAir && velocity.y > 0.f)
-		{
-			jumpState = JumpState::End;
-			animator.Play(&jumpend);
-			SetOrigin(Origins::BC);
-		}
+	if (jumpState == JumpState::MidAir && velocity.y > 0.f)
+	{
+		jumpState = JumpState::End;
+		animator.Play(&jumpend);
+		SetOrigin(Origins::BC);
 	}
+	/*}*/
 
 	// 바닥에 닿을 때 처리
-	sf::Vector2f nextPosition = position + velocity * dt;
 
-	if (nextPosition.y > -32.f)
-	{
-		nextPosition.y = -32.f;
-		velocity.y = 0.f;
-		isGrounded = true;
+	SetPosition(position + velocity * dt);
 
-		if (jumpState == JumpState::End)
-		{
-			jumpState = JumpState::None;
-			animator.Play(&stay);  
-			SetOrigin(Origins::BC);
-		}
-	}
+	//if (nextPosition.y > -32.f)
+	//{
+	//	nextPosition.y = -32.f;
+	//	velocity.y = 0.f;
+	//	isGrounded = true;
+	//
+	//	if (jumpState == JumpState::End)
+	//	{
+	//		jumpState = JumpState::None;
+	//		animator.Play(&stay);
+	//		SetOrigin(Origins::BC);
+	//	}
+	//}
 
-	position = nextPosition;
-	SetPosition(position);
-	if (diretcion.x != 0.f)
-	{
-		origin = Utils::SetOrigin(body, Origins::BC);
-		SetScale(diretcion.x > 0.f ? sf::Vector2f(1.f, 1.25f) : sf::Vector2f(-1.f, 1.25f));
-	}
+
 
 	if (jumpState == JumpState::Start)
 	{
 		if (animator.GetCurrentClipId() != "jumpstart")
 		{
 			animator.Play(&jumpstart);
-			SetOrigin(Origins::BC);
 		}
 	}
 	else if (jumpState == JumpState::MidAir)
@@ -249,7 +267,6 @@ animator.Update(dt);
 		if (animator.GetCurrentClipId() != "jumpping")
 		{
 			animator.Play(&jumpping);
-			SetOrigin(Origins::BC);
 		}
 	}
 	else if (jumpState == JumpState::End)
@@ -257,7 +274,6 @@ animator.Update(dt);
 		if (animator.GetCurrentClipId() != "jumpend")
 		{
 			animator.Play(&jumpend);
-			SetOrigin(Origins::BC);
 		}
 	}
 	else
@@ -267,7 +283,6 @@ animator.Update(dt);
 			if (diretcion.x != 0.f)
 			{
 				animator.Play(&run);
-				SetOrigin(Origins::BC);
 			}
 		}
 		else if (animator.GetCurrentClipId() == "run")
@@ -275,21 +290,74 @@ animator.Update(dt);
 			if (diretcion.x == 0.f)
 			{
 				animator.Play(&stay);
-				SetOrigin(Origins::BC);
 			}
 		}
 	}
 
 
-
-
-	hitbox.UpdateTr(body, body.getGlobalBounds());
 	hitbox.SetColor(sf::Color::White);
+	std::vector<HitBox>  HitBoxBounds;
+	//뷰의센터위치
 
-	/*auto stage1HitBoxBounds =dynamic_cast<Stage1Map*>(SCENE_MGR.GetCurrentScene()->FindGo("stage1"))->GetHitBoxs();*/
-	
+	auto viewcenter = SCENE_MGR.GetCurrentScene()->GetWorldViewCenter();
+	if(viewcenter.y == -180.f)
+		HitBoxBounds = dynamic_cast<Stage1Map*>(SCENE_MGR.GetCurrentScene()->FindGo("stage1"))->GetHitBoxs();
+	if (viewcenter.y == -540.f)
+		HitBoxBounds = dynamic_cast<Stage2Map*>(SCENE_MGR.GetCurrentScene()->FindGo("stage2"))->GetHitBoxs();
+	if(viewcenter.y == -900.f)
+		HitBoxBounds = dynamic_cast<Stage3Map*>(SCENE_MGR.GetCurrentScene()->FindGo("stage3"))->GetHitBoxs();
+	bool col = false;
+	for (auto& st1hitbox : HitBoxBounds)
+	{
+		if (Utils::CheckCollision(st1hitbox, hitbox))
+		{
+			col = true;
+			Player::CollisionState st = GetCollsionState(hitbox.rect.getGlobalBounds(), st1hitbox.rect.getGlobalBounds());
+			if (st.Up)
+			{
+				if (!isGrounded)
+				{
 
+					if (velocity.y < 0)
+						velocity.y *= -0.8f;
+				}
+			}
+			if (st.Down)
+			{
+				if (jumpState != JumpState::MidAir)
+				{
+					if (!isGrounded)
+						animator.Play(&stay);
+					isGrounded = true;
+					position.y = st1hitbox.rect.getGlobalBounds().top;
+					SetPosition(position);
+					velocity.y = 0.f;
+				}
 
+			}
+			if (st.Left && (!isGrounded || (st.Down == false)))
+			{
+				position.x += std::fabsf(velocity.x * dt);
+				SetPosition(position);
+			}
+			if (st.Right && (!isGrounded || (st.Down == false)))
+			{
+				position.x -= std::fabsf(velocity.x * dt);
+				SetPosition(position);
+			}
+			if (!isGrounded && ((st.Left && velocity.x < 0.f)
+				|| (st.Right && velocity.x > 0.f)))
+			{
+				std::cout << "ss" << velocity.x << std::endl;
+				velocity.x *= -1.f;
+			}
+		}
+	}
+	if (!col && isGrounded)
+	{
+		isGrounded = false;
+	}
+	hitbox.UpdateTr(body, body.getLocalBounds());
 
 }
 

@@ -13,8 +13,8 @@ void SceneDev1::Init()
 {
 	player = AddGo(new Player("player"));
 	stage1map = AddGo(new Stage1Map("grahpics/midground/1.png","stage1"));
-	stage2map = AddGo(new Stage2Map("grahpics/midground/2.png"));
-	stage3map = AddGo(new Stage3Map("grahpics/midground/3.png"));
+	stage2map = AddGo(new Stage2Map("grahpics/midground/2.png","stage2"));
+	stage3map = AddGo(new Stage3Map("grahpics/midground/3.png", "stage3"));
 
 
 

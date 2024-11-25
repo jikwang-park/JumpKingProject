@@ -29,7 +29,8 @@ void Stage1Map::SetOrigin(const sf::Vector2f& newOrigin)
 
 void Stage1Map::SetPosition(const sf::Vector2f& pos)
 {
-	SetOrigin(originPreset);
+	position = pos;
+	sprite.setPosition(position);
 }
 
 void Stage1Map::SetRotation(float angle)
@@ -49,13 +50,13 @@ void Stage1Map::Init()
 {
 	
 	sprite.setTexture(TEXTURE_MGR.Get("grahpics/midground/1.png"));
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < hitboxcount; ++i)
 	{ 
 		
 		hitboxs.push_back(hit);
 		
 	}
-	sprite.setPosition({ 0.f,0.f });
+	SetPosition({ 0.f,0.f });
 
 	SetOrigin(Origins::BC);
 	hitboxs[0].SetRect(sprite, sf::FloatRect(0, 0, 7, 180));
@@ -63,11 +64,13 @@ void Stage1Map::Init()
 	hitboxs[2].SetRect(sprite, sf::FloatRect(127, 327, 226, 33));
 	hitboxs[3].SetRect(sprite, sf::FloatRect(353, 180, 127, 180));
 	hitboxs[4].SetRect(sprite, sf::FloatRect(473, 0, 7, 180));
+	hitboxs[5].SetRect(sprite, sf::FloatRect(185, 40, 110, 50));
 	hitboxs[0].SetColor(sf::Color::Red);
 	hitboxs[1].SetColor(sf::Color::Green);
 	hitboxs[2].SetColor(sf::Color::Blue);
 	hitboxs[3].SetColor(sf::Color::Magenta);
 	hitboxs[4].SetColor(sf::Color::Yellow);
+	hitboxs[5].SetColor(sf::Color::Black);
 	hit.UpdateTr(sprite, sprite.getLocalBounds());
 
 	
@@ -101,7 +104,7 @@ void Stage1Map::Update(float dt)
 void Stage1Map::Draw(sf::RenderWindow& window)
 {
 	window.draw(sprite);
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i<hitboxcount; ++i)
 	{
 		hitboxs[i].Draw(window);
 		hit.Draw(window);

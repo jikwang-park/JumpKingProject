@@ -3,7 +3,10 @@
 class Stage3Map : public SpriteGo
 {
 protected:
+	std::vector<HitBox> hitboxs;
+	HitBox hit;
 
+	int hitboxcount = 9;
 public:
 	Stage3Map(const std::string& texId = "", const std::string& name = "");
 	~Stage3Map() = default;
@@ -17,6 +20,7 @@ public:
 	void SetRotation(float angle) override;
 	void SetScale(const sf::Vector2f& pos) override;
 
+	const std::vector<HitBox> GetHitBoxs() const { return hitboxs; }
 	void Init() override;
 	void Release() override;
 	void Reset() override;

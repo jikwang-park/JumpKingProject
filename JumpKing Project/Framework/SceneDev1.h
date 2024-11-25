@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "Stage1Map.h"
+#include "Stage2Map.h"
 class Stage1Map;
 class Stage2Map;
 class Stage3Map;
@@ -33,6 +34,8 @@ public:
 	void Exit() override;
 
 	std::vector<HitBox> GetStage1HitBoxs() const { return stage1map->GetHitBoxs(); }
+	std::vector<HitBox> GetStage2HitBoxs() const { return stage2map->GetHitBoxs(); }
+
 
 	void Update(float dt) override;
 	void Draw(sf::RenderWindow& window) override;

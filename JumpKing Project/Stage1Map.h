@@ -6,7 +6,7 @@ protected:
 	std::vector<HitBox> hitboxs;
 	HitBox hit;
 
-	
+	int hitboxcount = 6;
 public:
 	Stage1Map(const std::string& texId = "", const std::string& name = "");
 	~Stage1Map() = default;
@@ -20,7 +20,7 @@ public:
 	void SetRotation(float angle) override;
 	void SetScale(const sf::Vector2f& pos) override;
 	
-	std::vector<HitBox> GetHitBoxs() const { return hitboxs; }
+	const std::vector<HitBox> GetHitBoxs() const { return hitboxs; }
 	void Init() override;
 	void Release() override;
 	void Reset() override;
